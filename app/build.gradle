@@ -62,9 +62,16 @@ dependencies {
 
     //Room 사용하기
     //apply plugin: 'kotlin-kapt' 해줄 필요 있음
-
     implementation "android.arch.persistence.room:runtime:1.1.1"
     kapt "android.arch.persistence.room:compiler:1.1.1"
     kaptTest "android.arch.persistence.room:testing:1.1.1"
 
+    //LifecycleScope 코루틴 사용을 위함
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.0-alpha01'
+
+    def lifecycle_version = "2.2.0"
+    // ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    // LiveData
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
 }

@@ -2,9 +2,12 @@ package kr.hdev.roomexam
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.room.Room
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import kotlinx.android.synthetic.main.activity_main.*
-import java.util.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -12,15 +15,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val db = Room.databaseBuilder(this, AppDatabase::class.java, "todo_db")
-            .allowMainThreadQueries()
-            .build()
+        val viewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
-        db.todoDao().getAll().observe(this, androidx.lifecycle.Observer {
+        viewModel.getAll().observe(this, Observer {
             tv_result.text = it.toString()
         })
         btn_add.setOnClickListener{
-            db.todoDao().insert(Todo(title = et_todo.text.toString(),id = 0))
+            lifecycleScope.launch(Dispatchers.IO) {
+                viewModel.insert(Todo(et_todo.text.toString()))
+            }
         }
     }
 }
